@@ -66,12 +66,12 @@ export default defineConfig(({ command, mode }) => {
     ],
     server: {
       host: 'localhost',
-      port: 8001,
+      port: 8003,
       proxy: {
-        '/api-test': {
-          target: 'https://api.midfar.com/dspt_test/api',
+        '/api': {
+          target: 'http://127.0.0.1:8000/api',
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api-test/, ''),
+          rewrite: (path) => path.replace(/^\/api/, ''),
           headers: {
             Cookie: env.VUE_APP_COOKIE
           }
