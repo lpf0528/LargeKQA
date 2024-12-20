@@ -101,28 +101,35 @@
 
     <el-dialog :title="textMap[dialogStatus]" v-model="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="Type" prop="type">
-          <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
+        <el-form-item label="Name" prop="name">
+          <el-input v-model="temp.name" />
+        </el-form-item>
+        <el-form-item label="Model Type" prop="model_type">
+          <el-select v-model="temp.model_type" class="filter-item" placeholder="Please select">
             <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
           </el-select>
         </el-form-item>
-        <el-form-item label="Date" prop="timestamp">
-          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
+        <el-form-item label="Model Name" prop="model_name">
+          <el-input v-model="temp.model_name" />
         </el-form-item>
-        <el-form-item label="Title" prop="title">
-          <el-input v-model="temp.title" />
+        <el-form-item label="Provider" prop="provider">
+          <el-input v-model="temp.provider" />
         </el-form-item>
+        <el-form-item label="Provider Model ID" prop="provider_model_id">
+          <el-input v-model="temp.provider_model_id" />
+        </el-form-item>
+<!-- 
         <el-form-item label="Status">
           <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
             <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
           </el-select>
-        </el-form-item>
-        <el-form-item label="Imp">
+        </el-form-item> -->
+        <!-- <el-form-item label="Imp">
           <el-rate v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :max="3" style="margin-top:8px;" />
-        </el-form-item>
-        <el-form-item label="Remark">
+        </el-form-item> -->
+        <!-- <el-form-item label="Remark">
           <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
         <template #footer>
       <div class="dialog-footer">
@@ -154,6 +161,7 @@
 import { defineComponent, markRaw } from 'vue';
 import { Search, Edit, Download } from '@element-plus/icons-vue';
 import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article';
+import { createModel,fetchModelList } from '@/api/model';
 import waves from '@/directive/waves'; // waves directive
 import { parseTime } from '@/utils';
 import Pagination from '@/components/Pagination'; // secondary package based on el-pagination
@@ -199,12 +207,11 @@ export default defineComponent({
       showReviewer: false,
       temp: {
         id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        type: '',
-        status: 'published'
+        name: '',
+        model_type: '',
+        model_name: '',
+        provider: '',
+        provider_model_id: '',
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -240,7 +247,8 @@ export default defineComponent({
     },
     getList() {
       this.listLoading = true;
-      fetchList(this.listQuery).then(response => {
+      fetchModelList(this.listQuery).then(response => {
+        console.log("wwwwwwwwwwwwwwwwwwww",response);
         this.list = response.data.items;
         this.total = response.data.total;
 
@@ -297,17 +305,18 @@ export default defineComponent({
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024; // mock a id
-          this.temp.author = 'vue-element-admin';
-          createArticle(this.temp).then(() => {
-            this.list.unshift(this.temp);
-            this.dialogFormVisible = false;
-            ElNotification({
-              title: 'Success',
-              message: 'Created Successfully',
-              type: 'success',
-              duration: 2000
-            });
+          // this.temp.id = parseInt(Math.random() * 100) + 1024; // mock a id
+          // this.temp.author = 'vue-element-admin';
+          createModel(this.temp).then(() => {
+            console.log(this.temp);
+            // this.list.unshift(this.temp);
+            // this.dialogFormVisible = false;
+            // ElNotification({
+            //   title: 'Success',
+            //   message: 'Created Successfully',
+            //   type: 'success',
+            //   duration: 2000
+            // });
           });
         }
       });

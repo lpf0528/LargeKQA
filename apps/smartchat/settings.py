@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-kv3%(q^471wd6l81skym1=9hn*4#%+x^98&o0!_zjg8hrbg0t%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "setting"
+    'corsheaders',
+    "setting",
+    "users"
 ]
 
 REST_FRAMEWORK = {
@@ -47,7 +49,9 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
+       'corsheaders.middleware.CorsMiddleware',
+    # "django.middleware.security.SecurityMiddleware",
+ 
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -55,6 +59,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = "smartchat.urls"
 
