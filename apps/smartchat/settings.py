@@ -45,6 +45,11 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_RENDERER_CLASSES': [
+        # 'rest_framework.renderers.JSONRenderer',  # 返回json格式
+        'common.mixins.renderers.FitJSONRenderer',  # 这个自定义渲染器，为回文增加了code和msg
+        # 'rest_framework.renderers.BrowsableAPIRenderer'
+    ],
     'PAGE_SIZE': 10
 }
 

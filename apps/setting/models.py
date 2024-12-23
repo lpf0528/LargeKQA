@@ -2,8 +2,10 @@ import uuid
 
 from django.db import models
 
+from common.mixins.models import TimeStampedModel
 
-class LLModel(models.Model):
+
+class LLModel(TimeStampedModel):
     """
     LLM模型
     """

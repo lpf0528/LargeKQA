@@ -40,45 +40,19 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Date" width="150px" align="center">
+      <el-table-column label="Name" width="110px" align="center">
         <template v-slot="{row}">
-          <span>{{ parseTime(row.timestamp, '{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Title" min-width="150px">
+      <el-table-column label="Provider" width="110px" align="center">
         <template v-slot="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
-          <el-tag>{{ typeFilter(row.type) }}</el-tag>
+          <span>{{ row.provider }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Author" width="110px" align="center">
-        <template v-slot="{row}">
-          <span>{{ row.author }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column v-if="showReviewer" label="Reviewer" width="110px" align="center">
-        <template v-slot="{row}">
-          <span style="color:red;">{{ row.reviewer }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="Imp" width="80px">
-        <template v-slot="{row}">
-          <svg-icon v-for="n in row.importance" :key="n" icon-class="star" class="meta-item__icon" />
-        </template>
-      </el-table-column>
-      <el-table-column label="Readings" align="center" width="95">
-        <template v-slot="{row}">
-          <span v-if="row.pageviews" class="link-type" @click="handleFetchPv(row.pageviews)">{{ row.pageviews }}</span>
-          <span v-else>0</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="Status" class-name="status-col" width="100">
-        <template v-slot="{row}">
-          <el-tag :type="statusFilter(row.status)">
-            {{ row.status }}
-          </el-tag>
-        </template>
-      </el-table-column>
+     
+  
+
       <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
         <template v-slot="{row,$index}">
           <el-button type="primary" size="small" @click="handleUpdate(row)">
@@ -248,10 +222,8 @@ export default defineComponent({
     getList() {
       this.listLoading = true;
       fetchModelList(this.listQuery).then(response => {
-        console.log("wwwwwwwwwwwwwwwwwwww",response);
-        this.list = response.data.items;
-        this.total = response.data.total;
-
+        this.list = response.data.results;
+        this.total = response.data.count;
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false;
@@ -307,16 +279,15 @@ export default defineComponent({
         if (valid) {
           // this.temp.id = parseInt(Math.random() * 100) + 1024; // mock a id
           // this.temp.author = 'vue-element-admin';
-          createModel(this.temp).then(() => {
-            console.log(this.temp);
-            // this.list.unshift(this.temp);
-            // this.dialogFormVisible = false;
-            // ElNotification({
-            //   title: 'Success',
-            //   message: 'Created Successfully',
-            //   type: 'success',
-            //   duration: 2000
-            // });
+          createModel(this.temp).then((res) => {
+            this.list.unshift(res.data);
+            this.dialogFormVisible = false;
+            ElNotification({
+              title: 'Success',
+              message: 'Created Successfully',
+              type: 'success',
+              duration: 2000
+            });
           });
         }
       });
